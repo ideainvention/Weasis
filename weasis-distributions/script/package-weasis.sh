@@ -159,7 +159,7 @@ else
 fi
 
 # Then, get the installed version
-INSTALLED_VERSION=$($JAVACMD -version 2>&1 | awk '/version [0-9]*/ {print $3;}')
+INSTALLED_VERSION=$("$JAVACMD" -version 2>&1 | awk '/version [0-9]*/ {print $3;}')
 echo "Found java version $INSTALLED_VERSION"
 echo "Java command path: $JAVACMD"
 
@@ -241,7 +241,7 @@ declare -a commonOptions=("--java-options" "-Dgosh.port=17179" \
 "--java-options" "--add-opens=java.desktop/javax.imageio.stream=ALL-UNNAMED" "--java-options" "--add-opens=java.desktop/javax.imageio=ALL-UNNAMED" \
 "--java-options" "--add-opens=java.desktop/com.sun.awt=ALL-UNNAMED" )
 
-$JPKGCMD --type app-image --input "$INPUT_DIR" --dest "$OUTPUT_PATH" --name "$NAME" \
+"$JPKGCMD" --type app-image --input "$INPUT_DIR" --dest "$OUTPUT_PATH" --name "$NAME" \
 --main-jar weasis-launcher.jar --main-class org.weasis.launcher.AppLauncher --add-modules "$JDK_MODULES" \
 --add-launcher "${DICOMIZER_CONFIG}" --resource-dir "$RES"  --app-version "$WEASIS_CLEAN_VERSION" \
 "${tmpArgs[@]}" --verbose "${signArgs[@]}" "${customOptions[@]}" "${commonOptions[@]}"
@@ -251,7 +251,7 @@ if [ "$PACKAGE" = "YES" ] ; then
   COPYRIGHT="© 2009-2022 Weasis Team"
   if [ "$machine" = "windows" ] ; then
     [ "$arc" = "x86" ]  && UPGRADE_UID="3aedc24e-48a8-4623-ab39-0c3c01c7383b" || UPGRADE_UID="3aedc24e-48a8-4623-ab39-0c3c01c7383a"
-    $JPKGCMD --type "msi" --app-image "$IMAGE_PATH" --dest "$OUTPUT_PATH" --name "$NAME" --resource-dir "$RES/msi/${arc}" \
+    "$JPKGCMD" --type "msi" --app-image "$IMAGE_PATH" --dest "$OUTPUT_PATH" --name "$NAME" --resource-dir "$RES/msi/${arc}" \
     --license-file "$INPUT_PATH\Licence.txt" --description "Weasis DICOM viewer" --win-upgrade-uuid "$UPGRADE_UID"  \
     --win-menu --win-menu-group "$NAME" --copyright "$COPYRIGHT" --app-version "$WEASIS_CLEAN_VERSION" \
     --vendor "$VENDOR" --file-associations "${curPath}\file-associations.properties" "${tmpArgs[@]}" --verbose
